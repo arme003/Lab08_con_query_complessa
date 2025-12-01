@@ -1,0 +1,32 @@
+from dto import Tables
+from DB_connect import ConnessioneDB
+
+class DAO:
+    def __init__(self):
+        pass
+
+    def read(self,mese):
+        cnx=ConnessioneDB.get_connection()
+        results=[]
+        if cnx is None:
+            return None
+        cursor=cnx.cursor(dictionary=True)
+        query=("SELECT i.nome,AVG(c.kwh) AS consumo_medio "
+               "FROM impianto i,consumo c "
+               "WHERE i.id=c.id_impianto AND "
+               "MONTH(data)=%s "
+               "GROUP BY i.nome ")
+        try:
+            cursor.execute(query,(mese,))
+            rows=cursor.fetchall()
+            for row in rows:
+                t=Tables(row["nome"],row["consumo_medio"])
+                results.append(t)
+        except Exception as e:
+            print(f"Errore nella esecuzione delle query: {e}")
+        finally:
+            cursor.close()
+            cnx.close()
+        return results
+
+
