@@ -1,0 +1,12 @@
+from dao import DAO
+
+class Model:
+    def __init__(self):
+        self.dao = DAO()
+
+    def load(self,mese):
+        lista=self.dao.read(mese)
+        if lista is None:
+            print("ERRORE TRA MODEL E DAO")
+        return lista
+
