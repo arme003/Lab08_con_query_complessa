@@ -1,0 +1,30 @@
+from model import Model
+from view import View
+import flet as ft
+
+
+class Controller:
+    def __init__(self,model:Model,view:View):
+        self.model=model
+        self.view=view
+
+    def render(self,lista):
+        self.view.risultato.controls.clear()
+        self.view.risultato.controls.append(ft.Text(f"Il consume medio del mese selezionato è:\n"))
+        for item in lista:
+            self.view.risultato.controls.append(ft.Text(item))
+        self.view.update()
+
+    def show(self,e):
+        mese=self.view.dd_mesi.value
+        if not mese:
+            self.view.set_alarm("Seleziona un mese per favore")
+            return
+        lista=self.model.load(mese)
+        if not lista:
+            self.view.set_alarm("Non ci sono informazioni disponibili")
+            return
+        self.render(lista)
+        self.view.update()
+
+
