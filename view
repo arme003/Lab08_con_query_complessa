@@ -1,0 +1,64 @@
+import flet as ft
+
+class View:
+    def __init__(self,page:ft.Page):
+        self.page = page
+        self.controller=None
+
+    def set_controller(self,controller):
+        self.controller = controller
+
+    def start_gui(self):
+        self.page.title="Lab08"
+        self.page.scroll="auto"
+
+        #eccezioni
+        self.dsg=ft.AlertDialog(modal=False,bgcolor="red")
+
+        #1st row objects
+        self.testoPrincipale=ft.Text(value="Analisi Consumo",size=40)
+
+        #2nd row objects
+        self.dd_mesi = ft.Dropdown(
+            label="Mese",
+            options=[
+                ft.dropdown.Option(key="1", text="Gennaio"),
+                ft.dropdown.Option(key="2", text="Febbraio"),
+                ft.dropdown.Option(key="3", text="Marzo"),
+                ft.dropdown.Option(key="4", text="Aprile"),
+                ft.dropdown.Option(key="5", text="Maggio"),
+                ft.dropdown.Option(key="6", text="Giugno"),
+                ft.dropdown.Option(key="7", text="Luglio"),
+                ft.dropdown.Option(key="8", text="Agosto"),
+                ft.dropdown.Option(key="9", text="Settembre"),
+                ft.dropdown.Option(key="10", text="Ottobre"),
+                ft.dropdown.Option(key="11", text="Novembre"),
+                ft.dropdown.Option(key="12", text="Dicembre"),
+            ]
+        )
+        btn=ft.ElevatedButton(text="Consumo medio",color="blue",on_click=self.controller.show)
+
+        #3drow objects
+        self.risultato=ft.ListView()
+
+        #buildpage
+        self.page.add(
+            #1row
+            ft.Row([self.testoPrincipale],alignment=ft.MainAxisAlignment.CENTER),
+            ft.Divider(),
+
+            #2ndrow
+            ft.Row([self.dd_mesi,btn],alignment=ft.MainAxisAlignment.CENTER),
+            ft.Divider(),
+
+            #3rdrow
+            ft.Row([self.risultato],alignment=ft.MainAxisAlignment.CENTER),
+
+        )
+    def update(self):
+        self.page.update()
+
+    def set_alarm(self,msg):
+        self.dsg.title=ft.Text(msg)
+        self.page.open(self.dsg)
+        self.update()
